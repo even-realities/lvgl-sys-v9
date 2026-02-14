@@ -1,0 +1,35 @@
+[package]
+name = "lvgl-sys-v9"
+description = "Raw bindings to the LVGL v9 C library."
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+build = "build.rs"
+links = "lvgl"
+exclude = [
+    "vendor/lvgl/demos",
+    "vendor/lvgl/tests",
+    "vendor/lvgl/examples",
+    "vendor/lvgl/docs",
+    "vendor/lvgl/scripts",
+    "vendor/lvgl/env_support",
+]
+
+[lib]
+name = "lvgl_sys"
+
+[dependencies]
+cty = "0.2.2"
+
+[build-dependencies]
+cc = "1.0"
+bindgen = "0.70"
+
+[features]
+use-vendored-config = []
+rust_timer = []
+custom_timer = []
+
+[[example]]
+name = "circle"
+path = "examples/circle.rs"
