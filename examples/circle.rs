@@ -70,8 +70,8 @@ fn main() {
         lv_obj_center(arc);
 
         // Make it a full circle (background arc from 0 to 360)
-        lv_arc_set_bg_angles(arc, 0, 360);
-        lv_arc_set_angles(arc, 0, 270);  // Foreground arc shows 270 degrees
+        lv_arc_set_bg_angles(arc, 0.0, 360.0);
+        lv_arc_set_angles(arc, 0.0, 270.0);  // Foreground arc shows 270 degrees
 
         // Remove the knob
         lv_obj_remove_style(arc, std::ptr::null_mut(), LV_PART_KNOB);
