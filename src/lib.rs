@@ -10,5 +10,3 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 pub fn _bindgen_raw_src() -> &'static str {
     include_str!(concat!(env!("OUT_DIR"), "/bindings.rs"))
 }
-
-mod string_impl;
