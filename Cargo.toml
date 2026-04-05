@@ -29,6 +29,7 @@ bindgen = "0.70"
 use-vendored-config = []
 rust_timer = []
 custom_timer = []
+g2 = []
 
 [[example]]
 name = "circle"

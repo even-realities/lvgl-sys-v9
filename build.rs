@@ -101,6 +101,11 @@ fn main() {
         cfg.define(it.next().unwrap(), it.next().unwrap_or_default());
     });
 
+    // Patch font placeholder to match firmware behavior before compiling.
+    // Only applied for the g2 hardware target (eventhub-simulator).
+    #[cfg(feature = "g2")]
+    patch_font_placeholder(&lvgl_src);
+
     cfg.compile("lvgl");
 
     let mut cc_args = vec![
@@ -195,6 +200,38 @@ fn add_c_files(build: &mut cc::Build, path: impl AsRef<Path>) {
         } else if path.extension().and_then(|s| s.to_str()) == Some("c") {
             build.file(&path);
         }
+    }
+}
+
+/// Patch lv_font.c placeholder to match firmware:
+/// - box_w=0, box_h=0 (no visible rectangle)
+/// - adv_w=4 (firmware uses box_w=2, adv_w=box_w+2)
+#[cfg_attr(not(feature = "g2"), allow(dead_code))]
+fn patch_font_placeholder(lvgl_src: &Path) {
+    let font_file = lvgl_src.join("font").join("lv_font.c");
+    if !font_file.exists() {
+        return;
+    }
+    let content = std::fs::read_to_string(&font_file).unwrap();
+    if content.contains("adv_w = 4;   // firmware placeholder") {
+        return; // already patched
+    }
+    let patched = content
+        .replace(
+            "dsc_out->box_w = font_p->line_height / 2;",
+            "dsc_out->box_w = 0;   // firmware placeholder: no visible rect",
+        )
+        .replace(
+            "dsc_out->adv_w = dsc_out->box_w + 2;",
+            "dsc_out->adv_w = 4;   // firmware placeholder: box_w(2)+2",
+        )
+        .replace(
+            "dsc_out->box_h = font_p->line_height;",
+            "dsc_out->box_h = 0;",
+        );
+    if patched != content {
+        std::fs::write(&font_file, patched).unwrap();
+        println!("cargo:warning=Patched lv_font.c font placeholder to match firmware");
     }
 }
 
