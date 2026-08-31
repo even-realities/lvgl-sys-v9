@@ -18,9 +18,6 @@ exclude = [
 [lib]
 name = "lvgl_sys"
 
-[dependencies]
-cty = "0.2.2"
-
 [build-dependencies]
 cc = "1.0"
 bindgen = "0.70"

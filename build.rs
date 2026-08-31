@@ -158,7 +158,6 @@ fn main() {
         .derive_default(true)
         .layout_tests(false)
         .use_core()
-        .ctypes_prefix("cty")
         .clang_args(&cc_args)
         .clang_args(&additional_args)
         .clang_args(cflags_extra.map(|f| format!("-D{f}")))
